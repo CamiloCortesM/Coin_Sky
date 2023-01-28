@@ -34,3 +34,6 @@ class Hero(pygame.sprite.Sprite):
             self.rect.left = max(self.rect.left-self.speed, 0)
         else:
             self.rect.left = min(self. rect.left+self.speed, screensize[0])      
+    
+    def draw(self,screen):
+        screen.blit(self.image,self.rect)

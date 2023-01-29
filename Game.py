@@ -84,5 +84,27 @@ def main():
                 food_sprites_group.remove(food)
                 score += food.score
                 if score > highest_score: highest_score = score
+        hero.draw(screen)
+        
+        food_sprites_group.draw(screen)
+        
+        score_text = f'Score: {score}, Highest: {highest_score}'
+        score_text = font.render(score_text,True,(0,0,0))
+        score_rect = score_text.get_rect()
+        score_rect.topleft = [5,5]
+        screen.blit(score_text, score_rect)
+        
+        if pygame.time.get_ticks() >= 90000:
+            break
+        pygame.display.flip()
+        clock.tick(cfg.FPS)
+        
+    fp = open(cfg.HIGHEST_SCORE_RECORD_FILEPATH, 'w')
+    fp.write(str(highest_score))
+    fp.close()
+    return showEndInterface(screen, cfg, score, highest_score)
+
+
+
 if __name__ == "__main__":
-    initGame()
+    main()

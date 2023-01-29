@@ -28,9 +28,23 @@ def initGame():
     return screen, game_images, game_sounds
 
 
-    aux = True
-    while aux:
-        aux = endinterface.showEndInterface(screen,cfg,10,15)
+def main():
+    screen, game_images, game_sounds = initGame()
+    
+    pygame.mixer.music.load(cfg.AUDIO_PATHS['bgm'])
+    pygame.mixer.music.play(-1, 0.0)
+    
+    font = pygame.font.Font(cfg.FONT_PATH, 40)
+    
+    hero = Hero(game_images['hero'], position=(375,520))
+    
+    food_sprites_group = pygame.sprite.Group()
+    generate_food_freq = random.randint(10,20)
+    generate_font_count = 0
+    
+    score = 0
+    highest_score = 0 if not os.path.exists(cfg.HIGHEST_SCORE_RECORD_FILEPATH) else int(open(cfg.HIGHEST_SCORE_RECORD_FILEPATH).read())
+    clock = pygame.time.Clock()
 
 
 if __name__ == "__main__":

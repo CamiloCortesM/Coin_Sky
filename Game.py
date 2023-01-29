@@ -45,7 +45,28 @@ def main():
     score = 0
     highest_score = 0 if not os.path.exists(cfg.HIGHEST_SCORE_RECORD_FILEPATH) else int(open(cfg.HIGHEST_SCORE_RECORD_FILEPATH).read())
     clock = pygame.time.Clock()
-
-
+    
+    while True:
+        screen.fill(0)
+        screen.blit(game_images['background'],(0,0))
+    
+        countdown_text = 'Count down: ' + str((90000 - pygame.time.get_ticks())//60000) + ":" + str((90000 - pygame.time.get_ticks())//1000 %60).zfill(2)
+        countdown_text = font.render(countdown_text,True,(0,0,0))
+        countdown_rect = countdown_text.get_rect()
+        countdown_rect.topright = [cfg.SCREENSIZE[0]-30,5]
+        screen.blit(countdown_text,countdown_rect)
+       
+        for event in pygame.event.get():
+           if event.type == pygame.QUIT:
+               pygame.quit()
+               sys.exit()
+        key_pressed = pygame.key.get_pressed()
+        
+        if key_pressed[pygame.K_a] or key_pressed[pygame.K_LEFT]:
+            hero.move(cfg.SCREENSIZE, 'left')
+        if key_pressed[pygame.K_d] or key_pressed[pygame.K_RIGHT]:
+            hero.move(cfg.SCREENSIZE, 'right')
+            
+        
 if __name__ == "__main__":
     initGame()

@@ -40,7 +40,7 @@ def main():
     
     food_sprites_group = pygame.sprite.Group()
     generate_food_freq = random.randint(10,20)
-    generate_font_count = 0
+    generate_food_count = 0
     
     score = 0
     highest_score = 0 if not os.path.exists(cfg.HIGHEST_SCORE_RECORD_FILEPATH) else int(open(cfg.HIGHEST_SCORE_RECORD_FILEPATH).read())
@@ -67,6 +67,22 @@ def main():
         if key_pressed[pygame.K_d] or key_pressed[pygame.K_RIGHT]:
             hero.move(cfg.SCREENSIZE, 'right')
             
+        generate_food_count +=1
         
+        if generate_food_count > generate_food_freq:
+            generate_food_freq = random.randint(10,20)
+            generate_food_count = 0
+            food = Food(game_images, random.choice(['gold',]*10 + ['apple']), cfg.SCREENSIZE)
+            food_sprites_group.add(food)
+            
+        for food in food_sprites_group:
+            if food.update(): food_sprites_group.remove(food)
+        
+        for food in food_sprites_group:
+            if pygame.sprite.collide_mask(food, hero):
+                game_sounds['get'].play()
+                food_sprites_group.remove(food)
+                score += food.score
+                if score > highest_score: highest_score = score
 if __name__ == "__main__":
     initGame()

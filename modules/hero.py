@@ -2,7 +2,7 @@ import pygame
 
 
 class Hero(pygame.sprite.Sprite):
-    def __init__(self, images, position=[375,520], **kwargs):
+    def __init__(self, images, position=[375,526], **kwargs):
         pygame.sprite.Sprite.__init__(self)
         self.images_right = images[:5]
         self.images_left = images[5:]
@@ -26,14 +26,14 @@ class Hero(pygame.sprite.Sprite):
             self.switch_frame_count = 0
         
         self.switch_frame_count += 1
-        if self.switch_frame_count % self.switch_frame_freq == 0:
+        if self.switch_frame_count > 2:
             self.switch_frame_count = 0
             self.frame_index = (self.frame_index+1) % len(self.images)
             self.image = self.images[self.frame_index]
         if direction =='left':
             self.rect.left = max(self.rect.left-self.speed, 0)
         else:
-            self.rect.left = min(self. rect.left+self.speed, screensize[0])      
+            self.rect.left = min(self. rect.left+self.speed, screensize[0]-30)      
     
     def draw(self,screen):
         screen.blit(self.image,self.rect)

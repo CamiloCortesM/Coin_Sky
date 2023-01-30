@@ -9,7 +9,7 @@ class Food(pygame.sprite.Sprite):
         self.image = images_dict[selected_key]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-        self.rect.left, self.rect.bottom = random.randint(20,screensize[0]-20),-10
+        self.rect.left, self.rect.bottom = random.randint(20,screensize[0]-40),-10
         self.speed = random.randrange(5,10)
         self.score = 1 if selected_key == 'gold' else 5
    

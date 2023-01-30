@@ -28,15 +28,19 @@ def initGame():
     return screen, game_images, game_sounds
 
 
-def main():
+def main(lastTimer = 0):
+  
+    
     screen, game_images, game_sounds = initGame()
     
+    pygame.time.set_timer(pygame.USEREVENT, 0)
+    print(pygame.time.get_ticks())
     pygame.mixer.music.load(cfg.AUDIO_PATHS['bgm'])
     pygame.mixer.music.play(-1, 0.0)
     
     font = pygame.font.Font(cfg.FONT_PATH, 40)
     
-    hero = Hero(game_images['hero'], position=(375,520))
+    hero = Hero(game_images['hero'], position=(375,526))
     
     food_sprites_group = pygame.sprite.Group()
     generate_food_freq = random.randint(10,20)
@@ -47,10 +51,11 @@ def main():
     clock = pygame.time.Clock()
     
     while True:
+        timer = pygame.time.get_ticks()-lastTimer
+        print(timer)
         screen.fill(0)
         screen.blit(game_images['background'],(0,0))
-    
-        countdown_text = 'Count down: ' + str((90000 - pygame.time.get_ticks())//60000) + ":" + str((90000 - pygame.time.get_ticks())//1000 %60).zfill(2)
+        countdown_text = 'Count down: ' + str((90000 - timer)//60000) + ":" + str((90000 - timer)//1000 %60).zfill(2)
         countdown_text = font.render(countdown_text,True,(0,0,0))
         countdown_rect = countdown_text.get_rect()
         countdown_rect.topright = [cfg.SCREENSIZE[0]-30,5]
@@ -94,17 +99,25 @@ def main():
         score_rect.topleft = [5,5]
         screen.blit(score_text, score_rect)
         
-        if pygame.time.get_ticks() >= 90000:
-            break
+        if timer >= 90000:
+            fp = open(cfg.HIGHEST_SCORE_RECORD_FILEPATH, 'w')
+            fp.write(str(highest_score))
+            fp.close()
+            restart = showEndInterface(screen, cfg, score, highest_score)
+            if restart:
+                main(pygame.time.get_ticks())
+                continue
+            else:
+                break
         pygame.display.flip()
         clock.tick(cfg.FPS)
         
-    fp = open(cfg.HIGHEST_SCORE_RECORD_FILEPATH, 'w')
-    fp.write(str(highest_score))
-    fp.close()
-    return showEndInterface(screen, cfg, score, highest_score)
+        
+        
+    
 
 
 
 if __name__ == "__main__":
     main()
+    

@@ -33,13 +33,11 @@ def main(lastTimer = 0):
     
     screen, game_images, game_sounds = initGame()
     
-    pygame.time.set_timer(pygame.USEREVENT, 0)
-    print(pygame.time.get_ticks())
     pygame.mixer.music.load(cfg.AUDIO_PATHS['bgm'])
     pygame.mixer.music.play(-1, 0.0)
     
     font = pygame.font.Font(cfg.FONT_PATH, 40)
-    
+
     hero = Hero(game_images['hero'], position=(375,526))
     
     food_sprites_group = pygame.sprite.Group()
@@ -52,7 +50,6 @@ def main(lastTimer = 0):
     
     while True:
         timer = pygame.time.get_ticks()-lastTimer
-        print(timer)
         screen.fill(0)
         screen.blit(game_images['background'],(0,0))
         countdown_text = 'Count down: ' + str((90000 - timer)//60000) + ":" + str((90000 - timer)//1000 %60).zfill(2)
@@ -75,11 +72,11 @@ def main(lastTimer = 0):
         generate_food_count +=1
         
         if generate_food_count > generate_food_freq:
-            generate_food_freq = random.randint(10,20)
+            generate_food_freq = random.randint(10,22)
             generate_food_count = 0
             food = Food(game_images, random.choice(['gold',]*10 + ['apple']), cfg.SCREENSIZE)
             food_sprites_group.add(food)
-            
+        
         for food in food_sprites_group:
             if food.update(): food_sprites_group.remove(food)
         
